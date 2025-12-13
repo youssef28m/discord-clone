@@ -1,0 +1,11 @@
+# Node modules
+node_modules/
+
+# TypeScript
+dist/
+build/
+
+# Environment variables
+.env
+
+/src/generated/prisma
