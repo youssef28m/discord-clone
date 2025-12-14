@@ -14,11 +14,25 @@ datasource db {
 }
 
 model User {
-  id           String @id @default(uuid())
-  username     String   @unique
-  email        String   @unique
-  password     String   
-  avatarUrl    String?  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id           String         @id @default(uuid())
+  username     String         @unique
+  email        String         @unique
+  password     String
+  avatarUrl    String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  refreshTokens RefreshToken[]
 }
+
+model RefreshToken {
+  id        String   @id               // jti
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+

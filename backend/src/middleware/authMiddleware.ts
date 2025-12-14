@@ -1,6 +1,7 @@
 import type {NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "../utils/AppError.js";
+import { errorHandler } from "./errorHandler.js";
 
 declare global {
     namespace Express {
@@ -16,7 +17,7 @@ export function authenticateToken (req: Request, res: Response, next: NextFuncti
     const token = authHeader?.split(' ')[1];
 
     if (!token) {
-        return next(new AppError("Access token is required", 401, "UNAUTHORIZED"));
+        return errorHandler(new AppError("Access token is required. Use /refresh to get a new token.", 401, "UNAUTHORIZED"), req, res, next);
     }
 
     try {
