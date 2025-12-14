@@ -22,7 +22,6 @@ interface UpdateUserRequestBody {
     username?: string;
     email?: string;
     password?: string;
-    status?: string;
 }
 
 
@@ -102,8 +101,7 @@ export async function login(req: Request<{}, {}, LoginRequestBody>, res: Respons
                 token,
                 user: {
                     id: user.id,
-                    username: user.username,
-                    status: user.status
+                    username: user.username
                 }
             }
         });
@@ -123,7 +121,7 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
 
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { id: true, username: true, email: true, status: true, createdAt: true }
+            select: { id: true, username: true, email: true, createdAt: true }
         });
 
         if (!user) {
@@ -148,12 +146,11 @@ export async function updateUser(req: Request<{}, {}, UpdateUserRequestBody>, re
             return errorHandler(new AppError("Unauthorized to update this user", 403, "FORBIDDEN"), req, res, next);
         }
 
-        const { username, email, password, status } = req.body;
+        const { username, email, password } = req.body;
 
         const updateData: any = {};
         if (username) updateData.username = username;
         if (email) updateData.email = email;
-        if (status) updateData.status = status;
         if (password) {
             if (password.length < 6) {
                 return errorHandler(new AppError("Password must be at least 6 characters long", 400, "BAD_REQUEST"), req, res, next);
@@ -164,7 +161,7 @@ export async function updateUser(req: Request<{}, {}, UpdateUserRequestBody>, re
         const updatedUser = await prisma.user.update({
             where: { id: userId },
             data: updateData,
-            select: { id: true, username: true, email: true, status: true, createdAt: true }
+            select: { id: true, username: true, email: true, createdAt: true }
         });
 
         res.status(200).json({

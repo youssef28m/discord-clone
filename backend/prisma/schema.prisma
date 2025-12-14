@@ -19,7 +19,6 @@ model User {
   email        String   @unique
   password     String   
   avatarUrl    String?  
-  status       String   @default("offline")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
