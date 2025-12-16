@@ -13,22 +13,32 @@ datasource db {
   provider = "postgresql"
 }
 
+
+enum Role {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
 model User {
-  id           String         @id @default(uuid())
-  username     String         @unique
-  email        String         @unique
-  password     String
-  avatarUrl    String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   refreshTokens RefreshToken[]
+  servers       Servers[]
+  serverMembers server_members[]
+  presence     Presence?
 }
 
 model RefreshToken {
-  id        String   @id               // jti
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id // jti
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   expiresAt DateTime
   createdAt DateTime @default(now())
@@ -36,3 +46,46 @@ model RefreshToken {
   @@index([userId])
 }
 
+model Servers {
+  id       String @id @default(uuid())
+  name     String
+  owner_id String
+  user     User   @relation(fields: [owner_id], references: [id])
+
+  createdAt DateTime @default(now())
+
+  channels Channels[]
+  serverMembers server_members[]
+}
+
+model Channels {
+  id        String   @id @default(uuid())
+  name      String
+  type      String  @default("text") // text or voice
+  server_id String
+  server    Servers  @relation(fields: [server_id], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model server_members {
+  id        String @id @default(uuid())
+  user_id   String
+  server_id String
+  role      Role   @default(MEMBER)
+
+  user      User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  server    Servers @relation(fields: [server_id], references: [id])
+
+  joinedAt DateTime @default(now())
+}
+
+model Presence {
+  id        String @id @default(uuid())
+  user_id   String @unique
+  status    String // online, offline, idle
+  lastSeen DateTime @default(now())
+
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  updatedAt DateTime @updatedAt
+}

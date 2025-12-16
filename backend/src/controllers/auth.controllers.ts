@@ -5,7 +5,6 @@ import { errorHandler } from "../middleware/errorHandler.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { generateJwtAccessToken, generateJwtRefreshToken } from "../services/token.service.js";
-import path from "node:path";
 
 
 interface SignupRequestBody {
