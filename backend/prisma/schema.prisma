@@ -56,6 +56,8 @@ model Servers {
 
   channels Channels[]
   serverMembers server_members[]
+  invites Invites[]
+
 }
 
 model Channels {
@@ -88,4 +90,13 @@ model Presence {
 
   user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   updatedAt DateTime @updatedAt
+}
+
+model Invites {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  server_id  String
+  server     Servers  @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
 }

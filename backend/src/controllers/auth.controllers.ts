@@ -124,17 +124,18 @@ export async function refreshToken(req: Request, res: Response, next: NextFuncti
 
         const refreshToken = req.cookies['refreshToken'];
 
-        
         if (!refreshToken) {
             return errorHandler(new AppError("Refresh token is required", 400, "BAD_REQUEST"), req, res, next);
         }
 
         const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET!) as jwt.JwtPayload;
         const jti = decoded.jti;
+        
 
         const tokenRecord = await prisma.refreshToken.findUnique({
             where: { id: jti }
         });
+
     
         if (!tokenRecord) {
             return errorHandler(new AppError("Invalid refresh token", 401, "UNAUTHORIZED"), req, res, next);
