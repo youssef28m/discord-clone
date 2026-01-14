@@ -189,6 +189,57 @@ export async function getServerMembers(req: Request, res: Response, next: NextFu
 }
 
 //---------------------------------------------------------------------------//
+
+export async function kickMemberFromServer(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function banMemberFromServer(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function deleteServer(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function updateServerDetails(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function assignRoleToMember(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export async function removeRoleFromMember(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+//---------------------------------------------------------------------------//
 // Invite a user to a server
 //---------------------------------------------------------------------------//
 
